@@ -12,10 +12,12 @@ const KeyboardStyles = styled.div`
 `
 const KeyboardRowStyles = styled.div`
   display: block;
-  margin: 1rem;
+  margin: .25rem;
 `
 
 export default function Keyboard({onKeyPressCustom, guess}: KeyBoardProps) {
+  // explicitly rendering out which keys I want in each row to keep consistency
+  // across all responsive sizes
   const keyboardFirstRow: string[] = ['q','w','e','r','t','y','u','i','o','p',];
   const keyboardSecondRow: string[] = ['a','s','d','f','g','h','j','k','l'];
   const keyboardThirdRow: string[] = ['Enter', 'z','x','c','v','b','n','m', 'Backspace'];

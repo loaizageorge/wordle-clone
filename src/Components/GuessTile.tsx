@@ -5,6 +5,7 @@ interface GuessTileProps {
 }
 
 const GuessTileStyles = styled.span`
+  display: inline-block;
   border: 1px solid black;
   padding: 1rem;
   margin: .5rem;
