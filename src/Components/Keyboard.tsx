@@ -2,6 +2,7 @@ import KeyTile from './KeyTile';
 import styled from 'styled-components';
 
 interface KeyBoardProps {
+  checkGuess: Function,
   onKeyPressCustom: Function,
   guess: string[],
 }
@@ -15,7 +16,7 @@ const KeyboardRowStyles = styled.div`
   margin: .25rem;
 `
 
-export default function Keyboard({onKeyPressCustom, guess}: KeyBoardProps) {
+export default function Keyboard({onKeyPressCustom, guess, checkGuess}: KeyBoardProps) {
   // explicitly rendering out which keys I want in each row to keep consistency
   // across all responsive sizes
   const keyboardFirstRow: string[] = ['q','w','e','r','t','y','u','i','o','p',];
@@ -27,7 +28,12 @@ export default function Keyboard({onKeyPressCustom, guess}: KeyBoardProps) {
       <KeyboardRowStyles>
         {
           row.map((key) => {
-            return <KeyTile guess={guess} onKeyPressCustom={onKeyPressCustom} letter={key}/>
+            return <KeyTile
+              checkGuess={checkGuess}
+              guess={guess}
+              onKeyPressCustom={onKeyPressCustom}
+              letter={key}
+            />
           })
         }
     </KeyboardRowStyles>

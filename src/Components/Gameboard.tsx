@@ -7,6 +7,7 @@ import Guess from './Guess'
 // set these themselves as a way of increasing / decreasing the difficulty
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
+const ACTUAL_WORD = 'WORDL';
 
 /**
  * updateGuess is passed down to Keyboard which passes it down to KeyTitle
@@ -16,11 +17,33 @@ const WORD_LENGTH = 5;
  */
 export default function Gameboard() {
   const [guess, updateGuess] = useState([]);
+  const [attempt, updateAttemptCount] = useState(0);
+  const [prevGuesses, addGuess] = useState([[]]);
+
+  function checkGuess() {
+    // TODO: hit the dictionary API to see if this is a real world
+    const correct = guess.join('').toUpperCase() === ACTUAL_WORD;
+    if (correct) {
+      alert('You win!');
+    } else {
+      // save the guess to render with hints
+      if (prevGuesses[0].length) {
+        addGuess([...prevGuesses, guess]);
+      } else {
+        addGuess([guess]);
+      }
+
+      updateGuess([]);
+      // move onto the next guess
+      updateAttemptCount(attempt+1);
+
+    }
+  }
 
   return (
     <div>
-      <Guess wordLength={WORD_LENGTH} currentGuess={guess}/>
-      <Keyboard guess={guess} onKeyPressCustom={updateGuess}/>
+      <Guess guesses={MAX_GUESSES} wordLength={WORD_LENGTH} currentGuess={guess} attempt={attempt}/>
+      <Keyboard guess={guess} onKeyPressCustom={updateGuess} checkGuess={checkGuess} />
     </div>
   )
 }

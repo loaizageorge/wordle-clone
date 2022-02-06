@@ -1,24 +1,33 @@
 import GuessTile from './GuessTile'
+import styled from 'styled-components'
+import GuessRow from './GuessRow'
 
 interface GuessProps {
+  attempt: number,
+  currentGuess: string[],
+  guesses: number,
   wordLength: number,
-  currentGuess: string[]
 }
 
-export default function Guess({wordLength, currentGuess}: GuessProps) {
+const GuessRowStyles = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export default function Guess({attempt, currentGuess, wordLength, guesses}: GuessProps) {
   // Apparently this is better for iterating in a react render rather than just a for loop?
   // https://stackoverflow.com/a/30651275
-  const iterator =  Array(wordLength).fill(0);
+  const guessRowIterator = Array(guesses).fill(0);
+
   return (
     <div>
       {
-        iterator.map((_: number, index: number) => {
-          // We want to render out all the squares for a guess, so check
-          // the guess length so we're not accidentally going out of bounds
-          if (currentGuess[index] !== undefined) {
-            return <GuessTile letter={currentGuess[index]} />
-          }
-          return <GuessTile letter={''} />
+        guessRowIterator.map((_:number, index: number) => {
+          const active = index === attempt;
+          return <GuessRowStyles>
+            <GuessRow active={active} currentGuess={currentGuess} guesses={guesses} wordLength={wordLength} />
+          </GuessRowStyles>
+
         })
       }
     </div>
