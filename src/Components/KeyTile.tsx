@@ -7,8 +7,6 @@ interface KeyTileProps {
   guess: string[]
 }
 
-
-
 const KeyTileStyles = styled.span`
   display: inline-block;
   border: 1px solid black;
@@ -16,19 +14,16 @@ const KeyTileStyles = styled.span`
   margin: .25rem;
 `;
 
-
-
 const KeyTile = ({letter, onKeyPressCustom, guess, checkGuess}: KeyTileProps) => {
   function onClickHandler() {
     if (letter === 'Backspace') {
       // remove the last guessed letter
       const removed = guess.slice(0, -1);
-      console.log(guess);
-      console.log(removed);
       onKeyPressCustom(removed);
     } else if (letter === 'Enter') {
       checkGuess();
     } else {
+      // build up the guess
       onKeyPressCustom(guess.concat(letter));
     }
   }

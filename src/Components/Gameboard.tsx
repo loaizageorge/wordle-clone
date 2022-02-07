@@ -23,6 +23,7 @@ export default function Gameboard() {
   function checkGuess() {
     // TODO: hit the dictionary API to see if this is a real world
     const correct = guess.join('').toUpperCase() === ACTUAL_WORD;
+
     if (correct) {
       alert('You win!');
     } else {
@@ -40,9 +41,17 @@ export default function Gameboard() {
     }
   }
 
+  console.log(prevGuesses);
+
   return (
     <div>
-      <Guess guesses={MAX_GUESSES} wordLength={WORD_LENGTH} currentGuess={guess} attempt={attempt}/>
+      <Guess
+        guesses={MAX_GUESSES}
+        wordLength={WORD_LENGTH}
+        currentGuess={guess}
+        attempt={attempt}
+        prevGuesses={prevGuesses}
+      />
       <Keyboard guess={guess} onKeyPressCustom={updateGuess} checkGuess={checkGuess} />
     </div>
   )
