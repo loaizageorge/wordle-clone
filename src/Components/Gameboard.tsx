@@ -7,20 +7,31 @@ import Guess from './Guess'
 // set these themselves as a way of increasing / decreasing the difficulty
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
+
+// TODO: Generate this automagically somehow.. dictionary API?
 const ACTUAL_WORD = 'WORDL';
 
 /**
- * updateGuess is passed down to Keyboard which passes it down to KeyTitle
- * keyTile adds whatever key is clicked to the current guess
  * TODO: switch this to context maybe, or just figure out a better strategy
  * for communicating between these 2 levels?
  */
-export default function Gameboard() {
+const Gameboard = () => {
   const [guess, updateGuess] = useState([]);
   const [attempt, updateAttemptCount] = useState(0);
-  const [prevGuesses, addGuess] = useState([[]]);
+  const [prevGuesses, addGuessToPrev] = useState([[]]);
 
-  function checkGuess() {
+  /**
+   * 1. Guess === Word => You win!
+   * 2. Guess !== Word && attempt === MAX_ATTEMPTS => You lost!
+   * 3. ^ && attempt < MAX_ATTEMPTS => Move onto the next guess row and render
+   *      previous guesses with hint highlights
+   */
+  const checkGuess = () => {
+    // Don't pass go, don't collect $200
+    if (guess.length < WORD_LENGTH) {
+      return false;
+    }
+
     // TODO: hit the dictionary API to see if this is a real world
     const correct = guess.join('').toUpperCase() === ACTUAL_WORD;
 
@@ -29,9 +40,9 @@ export default function Gameboard() {
     } else {
       // save the guess to render with hints
       if (prevGuesses[0].length) {
-        addGuess([...prevGuesses, guess]);
+        addGuessToPrev([...prevGuesses, guess]);
       } else {
-        addGuess([guess]);
+        addGuessToPrev([guess]);
       }
 
       updateGuess([]);
@@ -41,7 +52,20 @@ export default function Gameboard() {
     }
   }
 
-  console.log(prevGuesses);
+  // TOOD: Maybe these 2 methods can live in the Keyboard component?
+  const addLetterToGuess = (letter: string) => {
+    if (guess.length < WORD_LENGTH) {
+      // @ts-ignore -> TODO: wtf?
+      updateGuess(guess.concat(letter));
+    }
+  }
+
+  const removePrevLetterFromGuess = () => {
+    if (guess.length) {
+      const removed = guess.slice(0, -1);
+      updateGuess(removed);
+    }
+  }
 
   return (
     <div>
@@ -52,7 +76,13 @@ export default function Gameboard() {
         attempt={attempt}
         prevGuesses={prevGuesses}
       />
-      <Keyboard guess={guess} onKeyPressCustom={updateGuess} checkGuess={checkGuess} />
+      <Keyboard
+        addLetterToGuess={addLetterToGuess}
+        checkGuess={checkGuess}
+        removePrevLetterFromGuess={removePrevLetterFromGuess}
+      />
     </div>
   )
 }
+
+export default Gameboard;

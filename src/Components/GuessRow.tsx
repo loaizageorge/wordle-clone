@@ -12,7 +12,7 @@ export default function GuessRow({currentGuess, wordLength}: GuessRowProps) {
     {
        worldLengthIterator.map((_: number, index: number) => {
         // We want to render out all the squares for a guess, so check
-        // the guess length so we're not accidentally going out of bound
+        // the guess length, so we're not accidentally going out of bounds
         if (currentGuess && currentGuess[index] !== undefined) {
           return <GuessTile letter={currentGuess[index]} />
         }

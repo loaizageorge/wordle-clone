@@ -3,8 +3,8 @@ import styled from 'styled-components';
 interface KeyTileProps {
   checkGuess: Function,
   letter: string,
-  onKeyPressCustom: Function,
-  guess: string[]
+  addLetterToGuess: Function,
+  removePrevLetterFromGuess: Function,
 }
 
 const KeyTileStyles = styled.span`
@@ -14,21 +14,18 @@ const KeyTileStyles = styled.span`
   margin: .25rem;
 `;
 
-const KeyTile = ({letter, onKeyPressCustom, guess, checkGuess}: KeyTileProps) => {
+const KeyTile = ({letter, addLetterToGuess, checkGuess, removePrevLetterFromGuess}: KeyTileProps) => {
   function onClickHandler() {
     if (letter === 'Backspace') {
-      // remove the last guessed letter
-      const removed = guess.slice(0, -1);
-      onKeyPressCustom(removed);
+      removePrevLetterFromGuess();
     } else if (letter === 'Enter') {
-      checkGuess();
+        checkGuess();
     } else {
-      // build up the guess
-      onKeyPressCustom(guess.concat(letter));
+      addLetterToGuess(letter);
     }
   }
   return (
-    <KeyTileStyles onClick={() =>onClickHandler()}>
+    <KeyTileStyles onClick={() => onClickHandler()}>
       {letter}
     </KeyTileStyles>
   )
