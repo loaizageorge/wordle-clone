@@ -6,7 +6,8 @@ interface GuessProps {
   currentGuess: string[],
   guesses: number,
   wordLength: number,
-  prevGuesses: string[][]
+  prevGuesses: string[][],
+  actualWord: string[]
 }
 
 const GuessRowStyles = styled.div`
@@ -14,7 +15,7 @@ const GuessRowStyles = styled.div`
   flex-direction: column;
 `;
 
-export default function Guess({attempt, currentGuess, wordLength, guesses, prevGuesses}: GuessProps) {
+export default function Guess({attempt, currentGuess, wordLength, guesses, prevGuesses, actualWord}: GuessProps) {
   // Apparently this is better for iterating in a react render rather than just a for loop?
   // https://stackoverflow.com/a/30651275
   const guessRowIterator = Array(guesses).fill(0);
@@ -25,7 +26,7 @@ export default function Guess({attempt, currentGuess, wordLength, guesses, prevG
         guessRowIterator.map((_:number, index: number) => {
           const active = index === attempt;
           return <GuessRowStyles>
-            <GuessRow currentGuess={active ? currentGuess : prevGuesses[index]} wordLength={wordLength} />
+            <GuessRow showHint={!active} actualWord={actualWord} guess={active ? currentGuess : prevGuesses[index]} wordLength={wordLength} />
           </GuessRowStyles>
 
         })

@@ -1,5 +1,6 @@
-import Keyboard from './Keyboard'
 import { useState } from 'react'
+
+import Keyboard from './Keyboard'
 import Guess from './Guess'
 
 // Each guess will render a row
@@ -9,7 +10,7 @@ const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
 // TODO: Generate this automagically somehow.. dictionary API?
-const ACTUAL_WORD = 'WORDL';
+const ACTUAL_WORD = ['W','O', 'R', 'D', 'L'];
 
 /**
  * TODO: switch this to context maybe, or just figure out a better strategy
@@ -33,7 +34,7 @@ const Gameboard = () => {
     }
 
     // TODO: hit the dictionary API to see if this is a real world
-    const correct = guess.join('').toUpperCase() === ACTUAL_WORD;
+    const correct = guess.join('').toUpperCase() === ACTUAL_WORD.join('');
 
     if (correct) {
       alert('You win!');
@@ -56,7 +57,7 @@ const Gameboard = () => {
   const addLetterToGuess = (letter: string) => {
     if (guess.length < WORD_LENGTH) {
       // @ts-ignore -> TODO: wtf?
-      updateGuess(guess.concat(letter));
+      updateGuess(guess.concat(letter.toUpperCase()));
     }
   }
 
@@ -70,6 +71,7 @@ const Gameboard = () => {
   return (
     <div>
       <Guess
+        actualWord={ACTUAL_WORD}
         guesses={MAX_GUESSES}
         wordLength={WORD_LENGTH}
         currentGuess={guess}
