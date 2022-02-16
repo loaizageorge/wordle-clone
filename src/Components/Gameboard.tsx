@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import Keyboard from './Keyboard'
 import Guess from './Guess'
+import request from '../utils/request'
 
 // Each guess will render a row
 // Maybe in the future we can introduce some UI elements so the user can
@@ -27,13 +28,17 @@ const Gameboard = () => {
    * 3. ^ && attempt < MAX_ATTEMPTS => Move onto the next guess row and render
    *      previous guesses with hint highlights
    */
-  const checkGuess = () => {
+  const checkGuess = async () => {
     // Don't pass go, don't collect $200
     if (guess.length < WORD_LENGTH) {
       return false;
     }
 
-    // TODO: hit the dictionary API to see if this is a real world
+    const realWord = await checkIfGuessIsRealWord();
+    if (!realWord) {
+      alert('The word you have guessed has been deemed fake by Merriam')
+      return false;
+    }
     const correct = guess.join('').toUpperCase() === ACTUAL_WORD.join('');
 
     if (correct) {
@@ -51,6 +56,11 @@ const Gameboard = () => {
       updateAttemptCount(attempt+1);
 
     }
+  }
+
+  const checkIfGuessIsRealWord = async () => {
+    const response = await request(guess.join(''));
+    return response.some((item: any) => typeof(item) === 'object');
   }
 
   // TOOD: Maybe these 2 methods can live in the Keyboard component?
