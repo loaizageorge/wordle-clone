@@ -9,25 +9,31 @@ interface IGuessTileStyles {
   tileBorderColor: string,
 }
 
-const GuessTileStyles = styled.span<IGuessTileStyles>`
-  display: inline-block;
-  padding: 1rem;
-  margin: .5rem;
-  border: 1px solid ${props => props.tileBorderColor}
+const GuessTileStyles = styled.div<IGuessTileStyles>`
+  display: inline-flex;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: bold;
+  border: 1px solid ${props => props.tileBorderColor};
+  ::before {
+    content: '';
+    padding-bottom: 100%;
+    display: inline-block;
   }
 `
 
 export default function GuessTile({letter, hint=''}: GuessTileProps) {
-  var tileBorderColor = 'black';
-  console.log(hint);
+  let tileBorderColor = 'black';
   if (hint === 'match') {
     tileBorderColor= 'green';
   } else if (hint ==='close') {
-    tileBorderColor = 'yellow';
+    tileBorderColor = 'red';
   }
 
 
-  return <GuessTileStyles tileBorderColor={tileBorderColor}>
+  return<GuessTileStyles tileBorderColor={tileBorderColor}>
     {letter}
   </GuessTileStyles>
 }

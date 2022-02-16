@@ -10,6 +10,7 @@ interface KeyBoardProps {
 const KeyboardStyles = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: center;
 `
 const KeyboardRowStyles = styled.div`
   display: block;

@@ -1,4 +1,5 @@
 import GuessTile from './GuessTile'
+import styled from 'styled-components'
 
 interface GuessRowProps {
   guess: string[],
@@ -6,6 +7,12 @@ interface GuessRowProps {
   actualWord: string[],
   showHint: boolean,
 }
+
+const GuessRowStyles = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 1.5rem;
+`
 
 export default function GuessRow({guess, wordLength, actualWord, showHint}: GuessRowProps) {
   const worldLengthIterator = Array(wordLength).fill(0);
@@ -24,7 +31,7 @@ export default function GuessRow({guess, wordLength, actualWord, showHint}: Gues
   }
 
   return (
-    <div>
+    <GuessRowStyles>
     {
        worldLengthIterator.map((_: number, index: number) => {
         // We want to render out all the squares for a guess, so check
@@ -36,6 +43,6 @@ export default function GuessRow({guess, wordLength, actualWord, showHint}: Gues
         return <GuessTile letter='' />
       })
     }
-    </div>
+    </GuessRowStyles>
   )
 }

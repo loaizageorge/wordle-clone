@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Keyboard from './Keyboard'
 import Guess from './Guess'
 import request from '../utils/request'
+import styled from 'styled-components'
 
 // Each guess will render a row
 // Maybe in the future we can introduce some UI elements so the user can
@@ -12,6 +13,13 @@ const WORD_LENGTH = 5;
 
 // TODO: Generate this automagically somehow.. dictionary API?
 const ACTUAL_WORD = ['W','O', 'R', 'D', 'L'];
+
+const GameboardStyles = styled.div`
+  display: grid;
+  grid-gap: 1rem;
+  max-width: 520px;
+  margin: 0 auto;
+`;
 
 /**
  * TODO: switch this to context maybe, or just figure out a better strategy
@@ -25,8 +33,8 @@ const Gameboard = () => {
   /**
    * 1. Guess === Word => You win!
    * 2. Guess !== Word && attempt === MAX_ATTEMPTS => You lost!
-   * 3. ^ && attempt < MAX_ATTEMPTS => Move onto the next guess row and render
-   *      previous guesses with hint highlights
+   * 3. Guess !== Word && attempt < MAX_ATTEMPTS => guess gets hints and player moves
+   * onto the next row
    */
   const checkGuess = async () => {
     // Don't pass go, don't collect $200
@@ -79,7 +87,7 @@ const Gameboard = () => {
   }
 
   return (
-    <div>
+    <GameboardStyles>
       <Guess
         actualWord={ACTUAL_WORD}
         guesses={MAX_GUESSES}
@@ -93,7 +101,7 @@ const Gameboard = () => {
         checkGuess={checkGuess}
         removePrevLetterFromGuess={removePrevLetterFromGuess}
       />
-    </div>
+    </GameboardStyles>
   )
 }
 

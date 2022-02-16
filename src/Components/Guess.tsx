@@ -11,8 +11,6 @@ interface GuessProps {
 }
 
 const GuessRowStyles = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 export default function Guess({attempt, currentGuess, wordLength, guesses, prevGuesses, actualWord}: GuessProps) {
@@ -21,7 +19,7 @@ export default function Guess({attempt, currentGuess, wordLength, guesses, prevG
   const guessRowIterator = Array(guesses).fill(0);
 
   return (
-    <div>
+    <>
       {
         guessRowIterator.map((_:number, index: number) => {
           const active = index === attempt;
@@ -31,7 +29,7 @@ export default function Guess({attempt, currentGuess, wordLength, guesses, prevG
 
         })
       }
-    </div>
+    </>
   )
 
 }
