@@ -29,6 +29,7 @@ const Gameboard = () => {
   const [guess, updateGuess] = useState([]);
   const [attempt, updateAttemptCount] = useState(0);
   const [prevGuesses, addGuessToPrev] = useState([[]]);
+  const [flipRowAnimation, setFlipRowAnimation] = useState(false);
 
   /**
    * 1. Guess === Word => You win!
@@ -45,28 +46,32 @@ const Gameboard = () => {
     const realWord = await checkIfGuessIsRealWord();
     if (!realWord) {
       alert('The word you have guessed has been deemed fake by Merriam')
+      // TODO: Fail / shake tile animation
       return false;
     }
-    const correct = guess.join('').toUpperCase() === ACTUAL_WORD.join('');
-
-    if (correct) {
-      alert('You win!');
+    // save the guess to render with hints
+    if (prevGuesses[0].length) {
+      addGuessToPrev([...prevGuesses, guess]);
     } else {
-      // save the guess to render with hints
-      if (prevGuesses[0].length) {
-        addGuessToPrev([...prevGuesses, guess]);
-      } else {
-        addGuessToPrev([guess]);
-      }
-
-      updateGuess([]);
-      // move onto the next guess
-      updateAttemptCount(attempt+1);
-
+      addGuessToPrev([guess]);
     }
+
+    // The word will be checked on componentDidUpdate so we can apply animations
+    // to the guess on the previous row, along with styled guess tiles
+    updateGuess([]);
+    updateAttemptCount(attempt+1);
+    setFlipRowAnimation(true);
+
+
+  }
+
+  // TODO: move this to useEffect on prevGuesses change
+  const checkGuess2 =() => {
+    const correct = guess.join('').toUpperCase() === ACTUAL_WORD.join('');
   }
 
   const checkIfGuessIsRealWord = async () => {
+    return true;
     const response = await request(guess.join(''));
     return response.some((item: any) => typeof(item) === 'object');
   }
@@ -95,6 +100,7 @@ const Gameboard = () => {
         currentGuess={guess}
         attempt={attempt}
         prevGuesses={prevGuesses}
+        flipRowAnimation={flipRowAnimation}
       />
       <Keyboard
         addLetterToGuess={addLetterToGuess}

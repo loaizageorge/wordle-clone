@@ -1,39 +1,62 @@
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components'
 
 interface GuessTileProps {
   letter: string
   hint?: string,
+  flipRowAnimation: boolean,
+  tileBorderColor ?: string
 }
 
-interface IGuessTileStyles {
-  tileBorderColor: string,
-}
+const rotate = keyframes`
+  0% {
+    transform: rotateX(0deg);
+  }
+  
+  25% {
+    transform: rotateX(-90deg);
+  }
 
-const GuessTileStyles = styled.div<IGuessTileStyles>`
+  50% {
+    transform: rotateX(-90deg);
+  }
+
+  100% {
+    transform: rotateX(0deg);
+  }
+`;
+
+const GuessTileStyles = styled.div<GuessTileProps>`
   display: inline-flex;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
   font-size: 3rem;
   font-weight: bold;
-  border: 1px solid ${props => props.tileBorderColor};
+  border: 2px solid ${props => props.tileBorderColor};
+  width: 100%;
+  height: 100%;
+  ${props => props.flipRowAnimation && css`
+    animation-name: ${rotate};
+    animation-duration: .75s;
+    animation-timing-function: linear;
+  `}
+  
   ::before {
     content: '';
     padding-bottom: 100%;
     display: inline-block;
   }
-`
+`;
 
-export default function GuessTile({letter, hint=''}: GuessTileProps) {
-  let tileBorderColor = 'black';
+export default function GuessTile({letter, hint='', flipRowAnimation}: GuessTileProps) {
+  let tileBorderColor = 'grey';
   if (hint === 'match') {
     tileBorderColor= 'green';
   } else if (hint ==='close') {
     tileBorderColor = 'red';
   }
 
-
-  return<GuessTileStyles tileBorderColor={tileBorderColor}>
-    {letter}
-  </GuessTileStyles>
+  return <GuessTileStyles letter={letter} flipRowAnimation={flipRowAnimation} tileBorderColor={tileBorderColor}>
+        {letter}
+    </GuessTileStyles>
 }

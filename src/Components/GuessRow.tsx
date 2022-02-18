@@ -6,6 +6,8 @@ interface GuessRowProps {
   wordLength: number,
   actualWord: string[],
   showHint: boolean,
+  className: string,
+  flipRowAnimation: boolean,
 }
 
 const GuessRowStyles = styled.div`
@@ -14,7 +16,7 @@ const GuessRowStyles = styled.div`
   grid-gap: 1.5rem;
 `
 
-export default function GuessRow({guess, wordLength, actualWord, showHint}: GuessRowProps) {
+export default function GuessRow({guess, wordLength, actualWord, showHint, flipRowAnimation}: GuessRowProps) {
   const worldLengthIterator = Array(wordLength).fill(0);
 
   function returnGuessTileHint(index: number) {
@@ -38,9 +40,9 @@ export default function GuessRow({guess, wordLength, actualWord, showHint}: Gues
         // the guess length, so we're not accidentally going out of bounds
         if (guess && guess[index] !== undefined) {
           const hintType = returnGuessTileHint(index);
-          return <GuessTile hint={hintType} letter={guess[index]} />
+          return <GuessTile flipRowAnimation={flipRowAnimation} hint={hintType} letter={guess[index]} />
         }
-        return <GuessTile letter='' />
+        return <GuessTile flipRowAnimation={false} letter='' />
       })
     }
     </GuessRowStyles>
