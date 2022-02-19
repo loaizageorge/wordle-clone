@@ -107,7 +107,7 @@ export default function GuessTile({letter, hint, flipRowAnimation}: GuessTilePro
       case hintEnum.close:
         return 'yellow';
       case hintEnum.wrong:
-        return 'red';
+        return 'grey';
       case hintEnum.inactive:
         return 'white';
     }
