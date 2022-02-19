@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Keyboard from './Keyboard'
 import Guess from './Guess'
@@ -61,16 +61,10 @@ const Gameboard = () => {
     updateGuess([]);
     updateAttemptCount(attempt+1);
     setFlipRowAnimation(true);
-
-
-  }
-
-  // TODO: move this to useEffect on prevGuesses change
-  const checkGuess2 =() => {
-    const correct = guess.join('').toUpperCase() === ACTUAL_WORD.join('');
   }
 
   const checkIfGuessIsRealWord = async () => {
+    // TODO: Remove when done testing, save dem api calls
     return true;
     const response = await request(guess.join(''));
     return response.some((item: any) => typeof(item) === 'object');
@@ -84,6 +78,7 @@ const Gameboard = () => {
     }
   }
 
+  // when backspace is entered
   const removePrevLetterFromGuess = () => {
     if (guess.length) {
       const removed = guess.slice(0, -1);

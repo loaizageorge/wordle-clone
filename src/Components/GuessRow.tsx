@@ -1,4 +1,4 @@
-import GuessTile from './GuessTile'
+import GuessTile, { hintEnum } from './GuessTile'
 import styled from 'styled-components'
 
 interface GuessRowProps {
@@ -21,15 +21,15 @@ export default function GuessRow({guess, wordLength, actualWord, showHint, flipR
 
   function returnGuessTileHint(index: number) {
     if (!showHint) {
-      return '';
+      return hintEnum.inactive;
     }
 
     if (guess[index] === actualWord[index]) {
-      return 'match';
+      return hintEnum.match;
     } else if (actualWord.includes(guess[index])) {
-      return 'close'
+      return hintEnum.close;
     }
-    return '';
+    return hintEnum.wrong;
   }
 
   return (
@@ -42,7 +42,7 @@ export default function GuessRow({guess, wordLength, actualWord, showHint, flipR
           const hintType = returnGuessTileHint(index);
           return <GuessTile flipRowAnimation={flipRowAnimation} hint={hintType} letter={guess[index]} />
         }
-        return <GuessTile flipRowAnimation={false} letter='' />
+        return <GuessTile hint={hintEnum.inactive} flipRowAnimation={false} letter='' />
       })
     }
     </GuessRowStyles>
