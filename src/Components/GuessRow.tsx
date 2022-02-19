@@ -40,9 +40,9 @@ export default function GuessRow({guess, wordLength, actualWord, showHint, flipR
         // the guess length, so we're not accidentally going out of bounds
         if (guess && guess[index] !== undefined) {
           const hintType = returnGuessTileHint(index);
-          return <GuessTile flipRowAnimation={flipRowAnimation} hint={hintType} letter={guess[index]} />
+          return <GuessTile key={index} flipRowAnimation={flipRowAnimation} hint={hintType} letter={guess[index]} />
         }
-        return <GuessTile hint={hintEnum.inactive} flipRowAnimation={false} letter='' />
+        return <GuessTile key={index} hint={hintEnum.inactive} flipRowAnimation={false} letter='' />
       })
     }
     </GuessRowStyles>

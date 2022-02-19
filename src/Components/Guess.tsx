@@ -25,8 +25,9 @@ export default function Guess({attempt, currentGuess, wordLength, guesses, prevG
         guessRowIterator.map((_:number, index: number) => {
           const active = index === attempt;
           const flip = flipRowAnimation && (index === attempt - 1);
-          return <GuessRowStyles>
-            <GuessRow key={`guess_row_${index}`} flipRowAnimation={flip} className='guess-row'  showHint={!active} actualWord={actualWord} guess={active ? currentGuess : prevGuesses[index]} wordLength={wordLength} />
+
+          return <GuessRowStyles key={index}>
+            <GuessRow key={index} flipRowAnimation={flip} className='guess-row'  showHint={!active} actualWord={actualWord} guess={active ? currentGuess : prevGuesses[index]} wordLength={wordLength} />
           </GuessRowStyles>
 
         })

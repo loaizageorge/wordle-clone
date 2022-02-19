@@ -28,8 +28,9 @@ export default function Keyboard({addLetterToGuess, checkGuess, removePrevLetter
     return (
       <KeyboardRowStyles>
         {
-          row.map((key) => {
+          row.map((key, index) => {
             return <KeyTile
+              key={index}
               checkGuess={checkGuess}
               addLetterToGuess={addLetterToGuess}
               removePrevLetterFromGuess={removePrevLetterFromGuess}
