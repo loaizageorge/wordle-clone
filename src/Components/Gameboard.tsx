@@ -30,7 +30,7 @@ const Gameboard = () => {
   const [attempt, updateAttemptCount] = useState(0);
   const [prevGuesses, addGuessToPrev] = useState([[]]);
   const [flipRowAnimation, setFlipRowAnimation] = useState(false);
-
+  const [animateRow, setAnimateRow] = useState('');
   /**
    * 1. Guess === Word => You win!
    * 2. Guess !== Word && attempt === MAX_ATTEMPTS => You lost!
@@ -45,9 +45,14 @@ const Gameboard = () => {
 
     const realWord = await checkIfGuessIsRealWord();
     if (!realWord) {
-      alert('The word you have guessed has been deemed fake by Merriam')
-      // TODO: Fail / shake tile animation
+      //alert('The word you have guessed has been deemed fake by Merriam')
+      setAnimateRow('error');
       return false;
+    }
+
+    // clear the error animation if it has been set previously
+    if (animateRow) {
+      setAnimateRow('');
     }
     // save the guess to render with hints
     if (prevGuesses[0].length) {
@@ -96,6 +101,7 @@ const Gameboard = () => {
         attempt={attempt}
         prevGuesses={prevGuesses}
         flipRowAnimation={flipRowAnimation}
+        animateRow={animateRow}
       />
       <Keyboard
         addLetterToGuess={addLetterToGuess}
