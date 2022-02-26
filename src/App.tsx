@@ -5,7 +5,7 @@ import Gameboard from './Components/Gameboard';
 function App() {
   return (
     <div className="App">
-      <Gameboard/>
+      <Gameboard />
     </div>
   );
 }

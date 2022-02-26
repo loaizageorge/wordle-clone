@@ -1,4 +1,5 @@
-import styled, { css, keyframes } from 'styled-components'
+import React from 'react';
+import styled, { css, keyframes } from 'styled-components';
 
 /**
  * inactive => tile not filled out yet
@@ -6,11 +7,11 @@ import styled, { css, keyframes } from 'styled-components'
  * match => letter is in correct spot
  * wrong => letter is not in guess
  */
-export const enum hintEnum {
+export const enum HintEnum {
   inactive = 'inactive',
   close = 'close',
   match = 'match',
-  wrong = 'wrong'
+  wrong = 'wrong',
 }
 
 interface IGuessTileStyles {
@@ -20,7 +21,7 @@ interface IGuessTileStyles {
 
 interface GuessTileProps {
   letter: string
-  hint: hintEnum,
+  hint: HintEnum,
   flipRowAnimation: boolean,
 }
 
@@ -66,23 +67,23 @@ const GuessTileStyles = styled.div<IGuessTileStyles>`
   justify-content: center;
   align-items: center;
   
-  border: 2px solid ${props => props.tileColor === 'white' ? 'grey' : 'black'};
+  border: 2px solid ${(props) => (props.tileColor === 'white' ? 'grey' : 'black')};
   
   width: 100%;
   height: 100%;
 
   font-size: 3rem;
   font-weight: bold;
-  color: ${props => props.tileColor === 'white' ? 'black' : 'white'};
+  color: ${(props) => (props.tileColor === 'white' ? 'black' : 'white')};
 
   // animation-fill-mode:forwards allows the hint styling to persist after the animation
   // is done. However once the animation is done we want to retain the hint styling
-  background-color: ${props => props.tileColor && !props.flipRowAnimation ? props.tileColor: 'white'};
-  ${props => props.tileColor !== 'white' && !props.flipRowAnimation && css`
+  background-color: ${(props) => (props.tileColor && !props.flipRowAnimation ? props.tileColor : 'white')};
+  ${(props) => props.tileColor !== 'white' && !props.flipRowAnimation && css`
     text-shadow: 2px 2px 4px black;
   `}
   
-  ${props => props.flipRowAnimation && css`
+  ${(props) => props.flipRowAnimation && css`
     animation-name: ${flipTile(props.tileColor)};
     animation-duration: .75s;
     animation-timing-function: linear;
@@ -97,25 +98,26 @@ const GuessTileStyles = styled.div<IGuessTileStyles>`
   }
 `;
 
-export default function GuessTile({letter, hint, flipRowAnimation}: GuessTileProps) {
-
+export default function GuessTile({ letter, hint, flipRowAnimation }: GuessTileProps) {
   // correspond the type of hint to a color for styling
-  const getColorTileFromHint = (hint: hintEnum) => {
-    switch (hint) {
-      case hintEnum.match:
+  const getColorTileFromHint = (color: HintEnum) => {
+    switch (color) {
+      case HintEnum.match:
         return 'green';
-      case hintEnum.close:
+      case HintEnum.close:
         return 'yellow';
-      case hintEnum.wrong:
+      case HintEnum.wrong:
         return 'grey';
-      case hintEnum.inactive:
+      case HintEnum.inactive:
+        return 'white';
+      default:
         return 'white';
     }
-  }
+  };
 
   return (
     <GuessTileStyles flipRowAnimation={flipRowAnimation} tileColor={getColorTileFromHint(hint)}>
-        {letter}
+      {letter}
     </GuessTileStyles>
   );
 }

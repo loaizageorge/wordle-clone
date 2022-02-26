@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
-
-import Keyboard from './Keyboard'
-import Guess from './Guess'
-import request from '../utils/request'
-import styled from 'styled-components'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Keyboard from './Keyboard';
+import Guess from './Guess';
+import request from '../utils/request';
 
 // Each guess will render a row
 // Maybe in the future we can introduce some UI elements so the user can
@@ -12,7 +11,7 @@ const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
 // TODO: Generate this automagically somehow.. dictionary API?
-const ACTUAL_WORD = ['W','O', 'R', 'D', 'L'];
+const ACTUAL_WORD = ['W', 'O', 'R', 'D', 'L'];
 
 const GameboardStyles = styled.div`
   display: grid;
@@ -25,12 +24,20 @@ const GameboardStyles = styled.div`
  * TODO: switch this to context maybe, or just figure out a better strategy
  * for communicating between these 2 levels?
  */
-const Gameboard = () => {
+function Gameboard() {
   const [guess, updateGuess] = useState([]);
   const [attempt, updateAttemptCount] = useState(0);
   const [prevGuesses, addGuessToPrev] = useState([[]]);
   const [flipRowAnimation, setFlipRowAnimation] = useState(false);
   const [animateRow, setAnimateRow] = useState('');
+
+  const checkIfGuessIsRealWord = async () => {
+    // TODO: Remove when done testing, save dem api calls
+    return true;
+    const response = await request(guess.join(''));
+    return response.some((item: any) => typeof (item) === 'object');
+  };
+
   /**
    * 1. Guess === Word => You win!
    * 2. Guess !== Word && attempt === MAX_ATTEMPTS => You lost!
@@ -45,7 +52,7 @@ const Gameboard = () => {
 
     const realWord = await checkIfGuessIsRealWord();
     if (!realWord) {
-      //alert('The word you have guessed has been deemed fake by Merriam')
+      // alert('The word you have guessed has been deemed fake by Merriam')
       setAnimateRow('error');
       return false;
     }
@@ -64,16 +71,10 @@ const Gameboard = () => {
     // The word will be checked on componentDidUpdate so we can apply animations
     // to the guess on the previous row, along with styled guess tiles
     updateGuess([]);
-    updateAttemptCount(attempt+1);
+    updateAttemptCount(attempt + 1);
     setFlipRowAnimation(true);
-  }
-
-  const checkIfGuessIsRealWord = async () => {
-    // TODO: Remove when done testing, save dem api calls
     return true;
-    const response = await request(guess.join(''));
-    return response.some((item: any) => typeof(item) === 'object');
-  }
+  };
 
   // TOOD: Maybe these 2 methods can live in the Keyboard component?
   const addLetterToGuess = (letter: string) => {
@@ -81,7 +82,7 @@ const Gameboard = () => {
       // @ts-ignore -> TODO: wtf?
       updateGuess(guess.concat(letter.toUpperCase()));
     }
-  }
+  };
 
   // when backspace is entered
   const removePrevLetterFromGuess = () => {
@@ -89,7 +90,7 @@ const Gameboard = () => {
       const removed = guess.slice(0, -1);
       updateGuess(removed);
     }
-  }
+  };
 
   return (
     <GameboardStyles>
@@ -109,7 +110,7 @@ const Gameboard = () => {
         removePrevLetterFromGuess={removePrevLetterFromGuess}
       />
     </GameboardStyles>
-  )
+  );
 }
 
 export default Gameboard;

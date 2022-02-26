@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 interface KeyTileProps {
@@ -14,12 +15,14 @@ const KeyTileStyles = styled.span`
   margin: .25rem;
 `;
 
-const KeyTile = ({letter, addLetterToGuess, checkGuess, removePrevLetterFromGuess}: KeyTileProps) => {
+function KeyTile({
+  letter, addLetterToGuess, checkGuess, removePrevLetterFromGuess,
+}: KeyTileProps) {
   function onClickHandler() {
     if (letter === 'Backspace') {
       removePrevLetterFromGuess();
     } else if (letter === 'Enter') {
-        checkGuess();
+      checkGuess();
     } else {
       addLetterToGuess(letter);
     }
@@ -28,7 +31,7 @@ const KeyTile = ({letter, addLetterToGuess, checkGuess, removePrevLetterFromGues
     <KeyTileStyles onClick={() => onClickHandler()}>
       {letter}
     </KeyTileStyles>
-  )
+  );
 }
 
 export default KeyTile;
