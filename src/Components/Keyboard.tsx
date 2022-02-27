@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import KeyTile from './KeyTile';
+import { IGuessedLetters } from './Gameboard';
 
 interface KeyBoardProps {
   checkGuess: Function,
   addLetterToGuess: Function,
   removePrevLetterFromGuess: Function,
+  guessedLetters: Array<IGuessedLetters>
 }
 
 const KeyboardStyles = styled.div`
@@ -22,6 +24,7 @@ export default function Keyboard({
   addLetterToGuess,
   checkGuess,
   removePrevLetterFromGuess,
+  guessedLetters,
 } : KeyBoardProps) {
   // explicitly rendering out which keys I want in each row to keep consistency
   // across all responsive sizes
@@ -38,6 +41,7 @@ export default function Keyboard({
               checkGuess={checkGuess}
               addLetterToGuess={addLetterToGuess}
               removePrevLetterFromGuess={removePrevLetterFromGuess}
+              guessedLetters={guessedLetters}
               letter={key}
             />
           ))

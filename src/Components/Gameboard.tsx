@@ -11,6 +11,7 @@ import request from '../utils/request';
 const WORD_LENGTH = 5;
 
 // TODO: Generate this automagically somehow.. dictionary API?
+// Call this answer
 const ACTUAL_WORD = ['W', 'O', 'R', 'D', 'L'];
 
 const GameboardStyles = styled.div`
@@ -19,6 +20,18 @@ const GameboardStyles = styled.div`
   max-width: 520px;
   margin: 0 auto;
 `;
+
+// TODO: something similar exists in GuessTile, consolidate this
+export enum LetterPosition {
+  correct = 'correct',
+  wrong = 'wrong',
+  close = 'close',
+}
+
+export interface IGuessedLetters {
+  letter: string,
+  type: LetterPosition
+}
 
 /**
  * TODO: switch this to context maybe, or just figure out a better strategy
@@ -30,6 +43,7 @@ function Gameboard() {
   const [prevGuesses, addGuessToPrev] = useState([[]]);
   const [flipRowAnimation, setFlipRowAnimation] = useState(false);
   const [animateRow, setAnimateRow] = useState('');
+  const [guessedLetters, setGuessedLetters] = useState<IGuessedLetters[]>([]);
 
   const checkIfGuessIsRealWord = async () => {
     // TODO: Remove when done testing, save dem api calls
@@ -68,6 +82,9 @@ function Gameboard() {
       addGuessToPrev([guess]);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    determineGuessedLetterType();
+
     // The word will be checked on componentDidUpdate so we can apply animations
     // to the guess on the previous row, along with styled guess tiles
     updateGuess([]);
@@ -92,6 +109,49 @@ function Gameboard() {
     }
   };
 
+  // eslint-disable-arrow-body-style
+  const checkIfLetterInGuessedLetters = (guessedLetter: string) => {
+    return guessedLetters.some((obj: IGuessedLetters) => guessedLetter === obj.letter);
+  };
+
+  // update guessedLetters so we can provide hints on the keyboard
+  const determineGuessedLetterType = () => {
+    const updatesToGuessedLetters = guessedLetters;
+    guess.forEach((guessedLetter: string, index: number) => {
+      // letter not in guess, add if not already
+      if (!ACTUAL_WORD.includes(guessedLetter) && !checkIfLetterInGuessedLetters(guessedLetter)) {
+        updatesToGuessedLetters.push(
+          { letter: guessedLetter, type: LetterPosition.wrong },
+        );
+      }
+      // letter is in guess
+      if (ACTUAL_WORD.includes(guessedLetter)) {
+        // letter is in correct spot
+        if (ACTUAL_WORD.indexOf(guessedLetter) === index) {
+          const exists = checkIfLetterInGuessedLetters(guessedLetter);
+          if (!exists) {
+            updatesToGuessedLetters.push(
+              { letter: guessedLetter, type: LetterPosition.correct },
+            );
+          } else {
+            // letter exists already as correct or close, update close to correct or ignore
+            // eslint-disable-next-line max-len
+            const existingLetterIndex = guessedLetters.findIndex((iterate:IGuessedLetters) => iterate.letter === guessedLetter);
+            if (updatesToGuessedLetters[existingLetterIndex].type === LetterPosition.close) {
+              updatesToGuessedLetters[existingLetterIndex].type = LetterPosition.correct;
+            }
+          }
+          // letter is close, add if not there already
+        } else if (!checkIfLetterInGuessedLetters(guessedLetter)) {
+          updatesToGuessedLetters.push(
+            { letter: guessedLetter, type: LetterPosition.close },
+          );
+        }
+      }
+    });
+    setGuessedLetters(updatesToGuessedLetters);
+  };
+
   return (
     <GameboardStyles>
       <Guess
@@ -103,6 +163,7 @@ function Gameboard() {
         animateRow={animateRow}
       />
       <Keyboard
+        guessedLetters={guessedLetters}
         addLetterToGuess={addLetterToGuess}
         checkGuess={checkGuess}
         removePrevLetterFromGuess={removePrevLetterFromGuess}
