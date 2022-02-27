@@ -1,18 +1,6 @@
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
-
-/**
- * inactive => tile not filled out yet
- * close => letter is in guess, but wrong spot
- * match => letter is in correct spot
- * wrong => letter is not in guess
- */
-export const enum HintEnum {
-  inactive = 'inactive',
-  close = 'close',
-  match = 'match',
-  wrong = 'wrong',
-}
+import { LetterPositionEnum, getColorFromLetterState } from '../utils/LetterPosition';
 
 interface IGuessTileStyles {
   tileColor: string,
@@ -21,7 +9,7 @@ interface IGuessTileStyles {
 
 interface GuessTileProps {
   letter: string
-  hint: HintEnum,
+  hint: LetterPositionEnum,
   flipRowAnimation: boolean,
 }
 
@@ -99,24 +87,8 @@ const GuessTileStyles = styled.div<IGuessTileStyles>`
 `;
 
 export default function GuessTile({ letter, hint, flipRowAnimation }: GuessTileProps) {
-  // correspond the type of hint to a color for styling
-  const getColorTileFromHint = (color: HintEnum) => {
-    switch (color) {
-      case HintEnum.match:
-        return 'green';
-      case HintEnum.close:
-        return 'yellow';
-      case HintEnum.wrong:
-        return 'grey';
-      case HintEnum.inactive:
-        return 'white';
-      default:
-        return 'white';
-    }
-  };
-
   return (
-    <GuessTileStyles flipRowAnimation={flipRowAnimation} tileColor={getColorTileFromHint(hint)}>
+    <GuessTileStyles flipRowAnimation={flipRowAnimation} tileColor={getColorFromLetterState(hint)}>
       {letter}
     </GuessTileStyles>
   );

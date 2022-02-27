@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IGuessedLetters } from './Gameboard';
-import {LetterPosition} from './Gameboard';
+import { getColorFromLetterState, IGuessedLetters } from '../utils/LetterPosition';
 
 interface KeyTileProps {
   checkGuess: Function,
@@ -37,20 +36,10 @@ function KeyTile({
   }
 
   const getKeyStyle = (key: string) => {
+    // eslint-disable-next-line max-len
     const found = guessedLetters.find((guessedLetter) => guessedLetter.letter === key.toUpperCase());
-
     if (found) {
-      console.log(found);
-      switch (found.type) {
-        case LetterPosition.correct:
-          return 'green';
-        case LetterPosition.close:
-          return 'yellow';
-        case LetterPosition.wrong:
-          return 'grey';
-        default:
-          return 'white';
-      }
+      return getColorFromLetterState(found.type);
     }
     return 'white';
   };

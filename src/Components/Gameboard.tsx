@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Keyboard from './Keyboard';
 import Guess from './Guess';
 import request from '../utils/request';
+import { IGuessedLetters, LetterPositionEnum } from '../utils/LetterPosition';
 
 // Each guess will render a row
 // Maybe in the future we can introduce some UI elements so the user can
@@ -20,19 +21,6 @@ const GameboardStyles = styled.div`
   max-width: 520px;
   margin: 0 auto;
 `;
-
-// TODO: something similar exists in GuessTile, consolidate this
-export enum LetterPosition {
-  correct = 'correct',
-  wrong = 'wrong',
-  close = 'close',
-}
-
-export interface IGuessedLetters {
-  letter: string,
-  type: LetterPosition
-}
-
 /**
  * TODO: switch this to context maybe, or just figure out a better strategy
  * for communicating between these 2 levels?
@@ -121,7 +109,7 @@ function Gameboard() {
       // letter not in guess, add if not already
       if (!ACTUAL_WORD.includes(guessedLetter) && !checkIfLetterInGuessedLetters(guessedLetter)) {
         updatesToGuessedLetters.push(
-          { letter: guessedLetter, type: LetterPosition.wrong },
+          { letter: guessedLetter, type: LetterPositionEnum.wrong },
         );
       }
       // letter is in guess
@@ -131,20 +119,20 @@ function Gameboard() {
           const exists = checkIfLetterInGuessedLetters(guessedLetter);
           if (!exists) {
             updatesToGuessedLetters.push(
-              { letter: guessedLetter, type: LetterPosition.correct },
+              { letter: guessedLetter, type: LetterPositionEnum.correct },
             );
           } else {
             // letter exists already as correct or close, update close to correct or ignore
             // eslint-disable-next-line max-len
             const existingLetterIndex = guessedLetters.findIndex((iterate:IGuessedLetters) => iterate.letter === guessedLetter);
-            if (updatesToGuessedLetters[existingLetterIndex].type === LetterPosition.close) {
-              updatesToGuessedLetters[existingLetterIndex].type = LetterPosition.correct;
+            if (updatesToGuessedLetters[existingLetterIndex].type === LetterPositionEnum.close) {
+              updatesToGuessedLetters[existingLetterIndex].type = LetterPositionEnum.correct;
             }
           }
           // letter is close, add if not there already
         } else if (!checkIfLetterInGuessedLetters(guessedLetter)) {
           updatesToGuessedLetters.push(
-            { letter: guessedLetter, type: LetterPosition.close },
+            { letter: guessedLetter, type: LetterPositionEnum.close },
           );
         }
       }

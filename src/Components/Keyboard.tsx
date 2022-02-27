@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import KeyTile from './KeyTile';
-import { IGuessedLetters } from './Gameboard';
+import { IGuessedLetters } from '../utils/LetterPosition';
 
 interface KeyBoardProps {
   checkGuess: Function,

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import React from 'react';
-import GuessTile, { HintEnum } from './GuessTile';
+import GuessTile from './GuessTile';
+import { LetterPositionEnum } from '../utils/LetterPosition';
 
 interface GuessRowProps {
   guess: string[],
@@ -22,15 +23,15 @@ export default function GuessRow({
 
   function returnGuessTileHint(index: number) {
     if (!showHint) {
-      return HintEnum.inactive;
+      return LetterPositionEnum.inactive;
     }
 
     if (guess[index] === actualWord[index]) {
-      return HintEnum.match;
+      return LetterPositionEnum.correct;
     } if (actualWord.includes(guess[index])) {
-      return HintEnum.close;
+      return LetterPositionEnum.close;
     }
-    return HintEnum.wrong;
+    return LetterPositionEnum.wrong;
   }
 
   return (
@@ -50,7 +51,7 @@ export default function GuessRow({
              />
            );
          }
-         return <GuessTile key={`tile_${_}`} hint={HintEnum.inactive} flipRowAnimation={false} letter="" />;
+         return <GuessTile key={`tile_${_}`} hint={LetterPositionEnum.inactive} flipRowAnimation={false} letter="" />;
        })
     }
     </GuessRowStyles>
