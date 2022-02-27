@@ -5,8 +5,6 @@ import GuessRow from './GuessRow';
 interface GuessProps {
   attempt: number,
   currentGuess: string[],
-  guesses: number,
-  wordLength: number,
   prevGuesses: string[][],
   actualWord: string[],
   flipRowAnimation: boolean,
@@ -43,11 +41,11 @@ ${(props) => props.animateError && css`
 `}`;
 
 export default function Guess({
-  attempt, currentGuess, wordLength, guesses, prevGuesses, actualWord, flipRowAnimation, animateRow,
+  attempt, currentGuess, prevGuesses, actualWord, flipRowAnimation, animateRow,
 }: GuessProps) {
   // Apparently this is better for iterating in a react render rather than just a for loop?
   // https://stackoverflow.com/a/30651275
-  const guessRowIterator = Array(guesses).fill(0);
+  const guessRowIterator = [0, 1, 2, 3, 4];
 
   return (
     <>
@@ -58,14 +56,13 @@ export default function Guess({
           const animateError = active && animateRow === 'error';
 
           return (
-            <GuessRowStyles className="row" animateError={animateError} key={index}>
+            <GuessRowStyles className="row" animateError={animateError} key={`row_${_}`}>
               <GuessRow
-                key={index}
+                key={`row_style_${_}`}
                 flipRowAnimation={flip}
                 showHint={!active}
                 actualWord={actualWord}
                 guess={active ? currentGuess : prevGuesses[index]}
-                wordLength={wordLength}
               />
             </GuessRowStyles>
           );

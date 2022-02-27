@@ -32,9 +32,9 @@ export default function Keyboard({
   const renderKeyBoardRow = (row: string[]) => (
     <KeyboardRowStyles>
       {
-          row.map((key, index) => (
+          row.map((key: string) => (
             <KeyTile
-              key={index}
+              key={key}
               checkGuess={checkGuess}
               addLetterToGuess={addLetterToGuess}
               removePrevLetterFromGuess={removePrevLetterFromGuess}

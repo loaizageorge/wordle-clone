@@ -7,7 +7,7 @@ import request from '../utils/request';
 // Each guess will render a row
 // Maybe in the future we can introduce some UI elements so the user can
 // set these themselves as a way of increasing / decreasing the difficulty
-const MAX_GUESSES = 6;
+// const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
 // TODO: Generate this automagically somehow.. dictionary API?
@@ -96,8 +96,6 @@ function Gameboard() {
     <GameboardStyles>
       <Guess
         actualWord={ACTUAL_WORD}
-        guesses={MAX_GUESSES}
-        wordLength={WORD_LENGTH}
         currentGuess={guess}
         attempt={attempt}
         prevGuesses={prevGuesses}

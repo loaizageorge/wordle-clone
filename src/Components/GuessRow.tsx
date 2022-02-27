@@ -4,7 +4,6 @@ import GuessTile, { HintEnum } from './GuessTile';
 
 interface GuessRowProps {
   guess: string[],
-  wordLength: number,
   actualWord: string[],
   showHint: boolean,
   flipRowAnimation: boolean,
@@ -17,9 +16,9 @@ const GuessRowStyles = styled.div`
 `;
 
 export default function GuessRow({
-  guess, wordLength, actualWord, showHint, flipRowAnimation,
+  guess, actualWord, showHint, flipRowAnimation,
 }: GuessRowProps) {
-  const worldLengthIterator = Array(wordLength).fill(0);
+  const worldLengthIterator = [0, 1, 2, 3, 4];
 
   function returnGuessTileHint(index: number) {
     if (!showHint) {
@@ -44,14 +43,14 @@ export default function GuessRow({
            const hintType = returnGuessTileHint(index);
            return (
              <GuessTile
-               key="index"
+               key={`tile_${_}`}
                flipRowAnimation={flipRowAnimation}
                hint={hintType}
                letter={guess[index]}
              />
            );
          }
-         return <GuessTile key={index} hint={HintEnum.inactive} flipRowAnimation={false} letter="" />;
+         return <GuessTile key={`tile_${_}`} hint={HintEnum.inactive} flipRowAnimation={false} letter="" />;
        })
     }
     </GuessRowStyles>
