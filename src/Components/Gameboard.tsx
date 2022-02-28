@@ -151,6 +151,7 @@ function Gameboard() {
         animateRow={animateRow}
       />
       <Keyboard
+        guess={guess}
         guessedLetters={guessedLetters}
         addLetterToGuess={addLetterToGuess}
         checkGuess={checkGuess}
