@@ -1,23 +1,51 @@
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import React from 'react';
 import GuessTile from './GuessTile';
 import { LetterPositionEnum } from '../utils/LetterPosition';
+
+const shake = keyframes`
+  0% {
+    transform: translateX(5px);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(5px);
+  }
+`;
 
 interface GuessRowProps {
   guess: string[],
   actualWord: string[],
   showHint: boolean,
   flipRowAnimation: boolean,
+  animateError: boolean
 }
 
-const GuessRowStyles = styled.div`
+interface IGuessRowStyles {
+  animateError: boolean
+}
+
+const GuessRowStyles = styled.div<IGuessRowStyles>`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 1.5rem;
+  ${(props) => props.animateError && css`
+    animation-name: ${shake};
+    animation-duration: .5s;
+    animation-timing-function: linear;
+  `}
 `;
 
 export default function GuessRow({
-  guess, actualWord, showHint, flipRowAnimation,
+  guess, actualWord, showHint, flipRowAnimation, animateError,
 }: GuessRowProps) {
   const worldLengthIterator = [0, 1, 2, 3, 4];
 
@@ -35,7 +63,7 @@ export default function GuessRow({
   }
 
   return (
-    <GuessRowStyles>
+    <GuessRowStyles animateError={animateError}>
       {
        worldLengthIterator.map((_: number, index: number) => {
          // We want to render out all the squares for a guess, so check

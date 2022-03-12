@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Keyboard from './Keyboard';
-import Guess from './Guess';
+import Board from './Board';
 import request from '../utils/request';
 import { IGuessedLetters, LetterPositionEnum } from '../utils/LetterPosition';
 
@@ -15,7 +15,7 @@ const WORD_LENGTH = 5;
 // Call this answer
 const ACTUAL_WORD = ['W', 'O', 'R', 'D', 'L'];
 
-const GameboardStyles = styled.div`
+const GameStyles = styled.div`
   display: grid;
   grid-gap: 1rem;
   max-width: 520px;
@@ -25,7 +25,7 @@ const GameboardStyles = styled.div`
  * TODO: switch this to context maybe, or just figure out a better strategy
  * for communicating between these 2 levels?
  */
-function Gameboard() {
+function Game() {
   const [guess, updateGuess] = useState([]);
   const [attempt, updateAttemptCount] = useState(0);
   const [prevGuesses, addGuessToPrev] = useState([[]]);
@@ -41,9 +41,9 @@ function Gameboard() {
   };
 
   /**
-   * 1. Guess === Word => You win!
-   * 2. Guess !== Word && attempt === MAX_ATTEMPTS => You lost!
-   * 3. Guess !== Word && attempt < MAX_ATTEMPTS => guess gets hints and player moves
+   * 1. Board === Word => You win!
+   * 2. Board !== Word && attempt === MAX_ATTEMPTS => You lost!
+   * 3. Board !== Word && attempt < MAX_ATTEMPTS => guess gets hints and player moves
    * onto the next row
    */
   const checkGuess = async () => {
@@ -97,10 +97,8 @@ function Gameboard() {
     }
   };
 
-  // eslint-disable-arrow-body-style
-  const checkIfLetterInGuessedLetters = (guessedLetter: string) => {
-    return guessedLetters.some((obj: IGuessedLetters) => guessedLetter === obj.letter);
-  };
+  // eslint-disable-next-line max-len
+  const checkIfLetterInGuessedLetters = (guessedLetter: string) => guessedLetters.some((obj: IGuessedLetters) => guessedLetter === obj.letter);
 
   // update guessedLetters so we can provide hints on the keyboard
   const determineGuessedLetterType = () => {
@@ -141,8 +139,8 @@ function Gameboard() {
   };
 
   return (
-    <GameboardStyles>
-      <Guess
+    <GameStyles>
+      <Board
         actualWord={ACTUAL_WORD}
         currentGuess={guess}
         attempt={attempt}
@@ -157,8 +155,8 @@ function Gameboard() {
         checkGuess={checkGuess}
         removePrevLetterFromGuess={removePrevLetterFromGuess}
       />
-    </GameboardStyles>
+    </GameStyles>
   );
 }
 
-export default Gameboard;
+export default Game;
