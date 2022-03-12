@@ -1,7 +1,7 @@
 import React from 'react';
-import GuessRow from './GuessRow';
+import Row from './Row';
 
-interface GuessProps {
+interface BoardProps {
   attempt: number,
   currentGuess: string[],
   prevGuesses: string[][],
@@ -9,9 +9,15 @@ interface GuessProps {
   animateRow: string,
 }
 
+/**
+ * The board renders rows and it is in charge of juggling the different states
+ * that the rows take. Active and Inactive. Inactive rows are either rows that
+ * have or haven't been guessed yet. Based on these states it also handles the
+ * animation state (if applicable)
+ */
 export default function Board({
   attempt, currentGuess, prevGuesses, flipRowAnimation, animateRow,
-}: GuessProps) {
+}: BoardProps) {
   // Apparently this is better for iterating in a react render rather than just a for loop?
   // https://stackoverflow.com/a/30651275
   const guessRowIterator = [0, 1, 2, 3, 4];
@@ -25,7 +31,7 @@ export default function Board({
           const animateError = active && animateRow === 'error';
 
           return (
-            <GuessRow
+            <Row
               key={`row_${_}`}
               flipRowAnimation={flip}
               showHint={!active}

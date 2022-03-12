@@ -22,18 +22,18 @@ const shake = keyframes`
   }
 `;
 
-interface GuessRowProps {
+interface RowProps {
   guess: string[],
   showHint: boolean,
   flipRowAnimation: boolean,
   animateError: boolean
 }
 
-interface IGuessRowStyles {
+interface IRowStyles {
   animateError: boolean
 }
 
-const GuessRowStyles = styled.div<IGuessRowStyles>`
+const RowStyles = styled.div<IRowStyles>`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 1.5rem;
@@ -44,9 +44,9 @@ const GuessRowStyles = styled.div<IGuessRowStyles>`
   `}
 `;
 
-export default function GuessRow({
+export default function Row({
   guess, showHint, flipRowAnimation, animateError,
-}: GuessRowProps) {
+}: RowProps) {
   const worldLengthIterator = [0, 1, 2, 3, 4];
 
   function returnGuessTileHint(index: number) {
@@ -63,7 +63,7 @@ export default function GuessRow({
   }
 
   return (
-    <GuessRowStyles animateError={animateError}>
+    <RowStyles animateError={animateError}>
       {
        worldLengthIterator.map((_: number, index: number) => {
          // We want to render out all the squares for a guess, so check
@@ -82,6 +82,6 @@ export default function GuessRow({
          return <GuessTile key={`tile_${_}`} hint={LetterPositionEnum.inactive} flipRowAnimation={false} letter="" />;
        })
     }
-    </GuessRowStyles>
+    </RowStyles>
   );
 }
