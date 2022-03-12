@@ -2,6 +2,7 @@ import styled, { css, keyframes } from 'styled-components';
 import React from 'react';
 import GuessTile from './GuessTile';
 import { LetterPositionEnum } from '../utils/LetterPosition';
+import { ACTUAL_WORD } from '../utils/constants';
 
 const shake = keyframes`
   0% {
@@ -23,7 +24,6 @@ const shake = keyframes`
 
 interface GuessRowProps {
   guess: string[],
-  actualWord: string[],
   showHint: boolean,
   flipRowAnimation: boolean,
   animateError: boolean
@@ -45,7 +45,7 @@ const GuessRowStyles = styled.div<IGuessRowStyles>`
 `;
 
 export default function GuessRow({
-  guess, actualWord, showHint, flipRowAnimation, animateError,
+  guess, showHint, flipRowAnimation, animateError,
 }: GuessRowProps) {
   const worldLengthIterator = [0, 1, 2, 3, 4];
 
@@ -54,9 +54,9 @@ export default function GuessRow({
       return LetterPositionEnum.inactive;
     }
 
-    if (guess[index] === actualWord[index]) {
+    if (guess[index] === ACTUAL_WORD[index]) {
       return LetterPositionEnum.correct;
-    } if (actualWord.includes(guess[index])) {
+    } if (ACTUAL_WORD.includes(guess[index])) {
       return LetterPositionEnum.close;
     }
     return LetterPositionEnum.wrong;

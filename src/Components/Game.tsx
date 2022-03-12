@@ -4,17 +4,12 @@ import Keyboard from './Keyboard';
 import Board from './Board';
 import request from '../utils/request';
 import { IGuessedLetters, LetterPositionEnum } from '../utils/LetterPosition';
+import { ACTUAL_WORD, WORD_LENGTH } from '../utils/constants';
 
 // Each guess will render a row
 // Maybe in the future we can introduce some UI elements so the user can
 // set these themselves as a way of increasing / decreasing the difficulty
 // const MAX_GUESSES = 6;
-const WORD_LENGTH = 5;
-
-// TODO: Generate this automagically somehow.. dictionary API?
-// Call this answer
-const ACTUAL_WORD = ['W', 'O', 'R', 'D', 'L'];
-
 const GameStyles = styled.div`
   display: grid;
   grid-gap: 1rem;
@@ -141,7 +136,6 @@ function Game() {
   return (
     <GameStyles>
       <Board
-        actualWord={ACTUAL_WORD}
         currentGuess={guess}
         attempt={attempt}
         prevGuesses={prevGuesses}

@@ -5,13 +5,12 @@ interface GuessProps {
   attempt: number,
   currentGuess: string[],
   prevGuesses: string[][],
-  actualWord: string[],
   flipRowAnimation: boolean,
   animateRow: string,
 }
 
 export default function Board({
-  attempt, currentGuess, prevGuesses, actualWord, flipRowAnimation, animateRow,
+  attempt, currentGuess, prevGuesses, flipRowAnimation, animateRow,
 }: GuessProps) {
   // Apparently this is better for iterating in a react render rather than just a for loop?
   // https://stackoverflow.com/a/30651275
@@ -30,7 +29,6 @@ export default function Board({
               key={`row_${_}`}
               flipRowAnimation={flip}
               showHint={!active}
-              actualWord={actualWord}
               guess={active ? currentGuess : prevGuesses[index]}
               animateError={animateError}
             />
