@@ -5,6 +5,7 @@ import Board from './Board';
 import request from '../utils/request';
 import { IGuessedLetters, LetterPositionEnum } from '../utils/LetterPosition';
 import { ACTUAL_WORD, WORD_LENGTH } from '../utils/constants';
+import Modal, { ModalType } from './Modal';
 
 // Each guess will render a row
 // Maybe in the future we can introduce some UI elements so the user can
@@ -27,6 +28,10 @@ function Game() {
   const [flipRowAnimation, setFlipRowAnimation] = useState(false);
   const [animateRow, setAnimateRow] = useState('');
   const [guessedLetters, setGuessedLetters] = useState<IGuessedLetters[]>([]);
+  // modal
+  const [showModal, updateShowModal] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [gameState, updateGameState] = useState({ active: true, type: 'active' });
 
   const checkIfGuessIsRealWord = async () => {
     // TODO: Remove when done testing, save dem api calls
@@ -67,6 +72,8 @@ function Game() {
 
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     determineGuessedLetterType();
+
+    // determine win or lose state
 
     // The word will be checked on componentDidUpdate so we can apply animations
     // to the guess on the previous row, along with styled guess tiles
@@ -135,6 +142,8 @@ function Game() {
 
   return (
     <GameStyles>
+      <button type="button" onClick={() => updateShowModal(true)}>Show Modal</button>
+      {showModal && <Modal type={ModalType.winner} updateShowModal={updateShowModal} />}
       <Board
         currentGuess={guess}
         attempt={attempt}
