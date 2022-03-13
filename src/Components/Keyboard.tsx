@@ -54,6 +54,7 @@ export default function Keyboard({
       return null;
     };
     window.addEventListener('keydown', keyPressHandler);
+    return () => window.removeEventListener('keydown', keyPressHandler);
   }, [guess]);
   const renderKeyBoardRow = (row: string[]) => (
     <KeyboardRowStyles>
