@@ -20,14 +20,14 @@ export default function Board({
 }: BoardProps) {
   // Apparently this is better for iterating in a react render rather than just a for loop?
   // https://stackoverflow.com/a/30651275
-  const guessRowIterator = [0, 1, 2, 3, 4];
+  const guessRowIterator = [0, 1, 2, 3, 4, 5];
 
   return (
     <>
       {
         guessRowIterator.map((_:number, index: number) => {
-          const active = index === attempt;
-          const flip = flipRowAnimation && (index === attempt - 1);
+          const active = index === attempt - 1;
+          const flip = flipRowAnimation && (index === attempt - 2);
           const animateError = active && animateRow === 'error';
 
           return (

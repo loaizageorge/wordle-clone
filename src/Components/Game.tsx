@@ -4,13 +4,12 @@ import Keyboard from './Keyboard';
 import Board from './Board';
 import request from '../utils/request';
 import { IGuessedLetters, LetterPositionEnum } from '../utils/LetterPosition';
-import { ACTUAL_WORD, WORD_LENGTH } from '../utils/constants';
+import { ACTUAL_WORD, MAX_GUESSES, WORD_LENGTH } from '../utils/constants';
 import Modal, { ModalType } from './Modal';
 
 // Each guess will render a row
 // Maybe in the future we can introduce some UI elements so the user can
 // set these themselves as a way of increasing / decreasing the difficulty
-// const MAX_GUESSES = 6;
 const GameStyles = styled.div`
   display: grid;
   grid-gap: 1rem;
@@ -23,7 +22,7 @@ const GameStyles = styled.div`
  */
 function Game() {
   const [guess, updateGuess] = useState([]);
-  const [attempt, updateAttemptCount] = useState(0);
+  const [attempt, updateAttemptCount] = useState(1);
   const [prevGuesses, addGuessToPrev] = useState([[]]);
   const [flipRowAnimation, setFlipRowAnimation] = useState(false);
   const [animateRow, setAnimateRow] = useState('');
@@ -31,7 +30,7 @@ function Game() {
   // modal
   const [showModal, updateShowModal] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [gameState, updateGameState] = useState({ active: true, type: 'active' });
+  const [gameState, updateGameState] = useState(ModalType.none);
 
   const checkIfGuessIsRealWord = async () => {
     // TODO: Remove when done testing, save dem api calls
@@ -39,6 +38,15 @@ function Game() {
     const response = await request(guess.join(''));
     return response.some((item: any) => typeof (item) === 'object');
   };
+
+  // eslint-disable-next-line arrow-body-style
+  const checkWinCondition = () => {
+    return guess.join('').toUpperCase() === ACTUAL_WORD.join(''.toUpperCase());
+  };
+
+  function checkGameOver() {
+    return attempt === MAX_GUESSES;
+  }
 
   /**
    * 1. Board === Word => You win!
@@ -70,10 +78,21 @@ function Game() {
       addGuessToPrev([guess]);
     }
 
+    // determine win or lose state
+
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     determineGuessedLetterType();
 
-    // determine win or lose state
+    if (checkWinCondition()) {
+      updateShowModal(true);
+      updateGameState(ModalType.winner);
+      return true;
+    }
+    if (checkGameOver()) {
+      updateShowModal(true);
+      updateGameState(ModalType.gameOver);
+      return true;
+    }
 
     // The word will be checked on componentDidUpdate so we can apply animations
     // to the guess on the previous row, along with styled guess tiles
@@ -81,6 +100,15 @@ function Game() {
     updateAttemptCount(attempt + 1);
     setFlipRowAnimation(true);
     return true;
+  };
+
+  const restartGame = () => {
+    updateGuess([]);
+    updateAttemptCount(1);
+    addGuessToPrev([[]]);
+    updateShowModal(false);
+    updateGameState(ModalType.none);
+    setGuessedLetters([]);
   };
 
   // TOOD: Maybe these 2 methods can live in the Keyboard component?
@@ -142,8 +170,15 @@ function Game() {
 
   return (
     <GameStyles>
-      <button type="button" onClick={() => updateShowModal(true)}>Show Modal</button>
-      {showModal && <Modal type={ModalType.winner} updateShowModal={updateShowModal} />}
+      {
+        showModal && (
+        <Modal
+          type={gameState}
+          updateShowModal={updateShowModal}
+          restartGame={restartGame}
+        />
+        )
+      }
       <Board
         currentGuess={guess}
         attempt={attempt}

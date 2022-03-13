@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { ACTUAL_WORD } from '../utils/constants';
+// import { ACTUAL_WORD } from '../utils/constants';
 
 export enum ModalType {
   winner = 'winner',
   gameOver = 'gameOver',
+  none = '',
 }
 
 interface ModalProps {
   updateShowModal: Function
+  restartGame: Function,
   type: ModalType
 }
 
@@ -21,6 +25,7 @@ const ModalStyles = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0,0,0,0.5);
+  z-index: 9999;
   .modal-content {
     width: 500px;
     background-color: white;
@@ -42,23 +47,30 @@ const ModalStyles = styled.div`
   }
 `;
 
-export default function Modal({ updateShowModal, type }: ModalProps) {
+export default function Modal({ updateShowModal, restartGame, type }: ModalProps) {
+  const [showAnswer, updateShowAnswer] = useState(false);
+
   const winnerMessages = () => ({
-    title: 'Winner winner, chicken dinner',
+    title: 'Winner winner, chicken dinner!',
     body: 'You guessed the word in X tries',
-    actions: <button type="button">Retry</button>,
   });
 
   const loserMessages = () => ({
     title: 'Game over!',
-    body: 'Give it another go, or see the answer',
-    actions: <button type="button">Retry</button>,
+    body: showAnswer
+      ? `The word you were looking for was: ${ACTUAL_WORD.join('').toLowerCase()}`
+      : 'Give it another go, or give up to see the answer',
   });
+
+  const handleModalClose = () => {
+    updateShowModal(false);
+    updateShowAnswer(false);
+  };
 
   const messages = type === ModalType.winner ? winnerMessages() : loserMessages();
 
   return (
-    <ModalStyles onClick={() => updateShowModal(false)}>
+    <ModalStyles onClick={() => handleModalClose()}>
       <div
         role="presentation"
         className="modal-content"
@@ -69,7 +81,12 @@ export default function Modal({ updateShowModal, type }: ModalProps) {
         </div>
         <div className="modal-body">{messages.body}</div>
         <div className="modal-footer">
-          {messages.actions}
+          <button type="button" onClick={() => restartGame()}>Retry</button>
+          <button type="button" onClick={() => handleModalClose()}>Close</button>
+          {
+            type === ModalType.gameOver
+            && <button type="button" disabled={showAnswer} onClick={() => updateShowAnswer(true)}>Reveal Answer</button>
+          }
         </div>
       </div>
     </ModalStyles>
