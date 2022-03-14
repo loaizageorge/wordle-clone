@@ -26,9 +26,9 @@ const KeyboardRowStyles = styled.div`
 // across all responsive sizes
 const keyboardFirstRow: string[] = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
 const keyboardSecondRow: string[] = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'];
-const keyboardThirdRow: string[] = ['Enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Backspace'];
+const keyboardThirdRow: string[] = ['Enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '⇍'];
 
-const allowedKeys = [...keyboardFirstRow, ...keyboardSecondRow, ...keyboardThirdRow];
+const allowedKeys = [...keyboardFirstRow, ...keyboardSecondRow, ...keyboardThirdRow, 'Backspace'];
 
 export default function Keyboard({
   addLetterToGuess,

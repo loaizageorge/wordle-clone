@@ -26,7 +26,7 @@ function KeyTile({
   letter, addLetterToGuess, checkGuess, removePrevLetterFromGuess, guessedLetters,
 }: KeyTileProps) {
   function onClickHandler() {
-    if (letter === 'Backspace') {
+    if (letter === '⇍') {
       removePrevLetterFromGuess();
     } else if (letter === 'Enter') {
       checkGuess();
