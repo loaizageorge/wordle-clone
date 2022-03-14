@@ -55,22 +55,29 @@ function Game() {
    * onto the next row
    */
   const checkGuess = async () => {
-    // Don't pass go, don't collect $200
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    if (!gameActive()) {
+      updateShowModal(true);
+    }
     if (guess.length < WORD_LENGTH) {
-      return false;
+      return;
     }
 
     const realWord = await checkIfGuessIsRealWord();
     if (!realWord) {
       // alert('The word you have guessed has been deemed fake by Merriam')
       setAnimateRow('error');
-      return false;
+      return;
     }
 
     // clear the error animation if it has been set previously
     if (animateRow) {
       setAnimateRow('');
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    determineGuessedLetterType();
+
     // save the guess to render with hints
     if (prevGuesses[0].length) {
       addGuessToPrev([...prevGuesses, guess]);
@@ -78,28 +85,18 @@ function Game() {
       addGuessToPrev([guess]);
     }
 
-    // determine win or lose state
-
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    determineGuessedLetterType();
+    updateAttemptCount(attempt + 1);
+    setFlipRowAnimation(true);
+    updateGuess([]);
 
     if (checkWinCondition()) {
       updateShowModal(true);
       updateGameState(ModalType.winner);
-      return true;
     }
     if (checkGameOver()) {
       updateShowModal(true);
       updateGameState(ModalType.gameOver);
-      return true;
     }
-
-    // The word will be checked on componentDidUpdate so we can apply animations
-    // to the guess on the previous row, along with styled guess tiles
-    updateGuess([]);
-    updateAttemptCount(attempt + 1);
-    setFlipRowAnimation(true);
-    return true;
   };
 
   const restartGame = () => {
@@ -111,9 +108,13 @@ function Game() {
     setGuessedLetters([]);
   };
 
+  function gameActive() {
+    return gameState === ModalType.none;
+  }
+
   // TOOD: Maybe these 2 methods can live in the Keyboard component?
   const addLetterToGuess = (letter: string) => {
-    if (guess.length < WORD_LENGTH) {
+    if (guess.length < WORD_LENGTH && gameActive()) {
       // @ts-ignore -> TODO: wtf?
       updateGuess(guess.concat(letter.toUpperCase()));
     }
@@ -121,7 +122,7 @@ function Game() {
 
   // when backspace is entered
   const removePrevLetterFromGuess = () => {
-    if (guess.length) {
+    if (guess.length && gameActive) {
       const removed = guess.slice(0, -1);
       updateGuess(removed);
     }
