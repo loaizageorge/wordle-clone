@@ -36,7 +36,7 @@ interface IRowStyles {
 const RowStyles = styled.div<IRowStyles>`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-gap: 1.5rem;
+  grid-gap: .25rem;
   ${(props) => props.animateError && css`
     animation-name: ${shake};
     animation-duration: .5s;
