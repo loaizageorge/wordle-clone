@@ -50,7 +50,7 @@ const flipTile = (tileColor: string) => keyframes`
 // after the row is guessed, trigger the flip animation and change the tile background
 // to correspond to the hint color and change text to white w/ box shadow
 const GuessTileStyles = styled.div<IGuessTileStyles>`
-  display: inline-flex;
+  display: inline-block;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
@@ -63,6 +63,7 @@ const GuessTileStyles = styled.div<IGuessTileStyles>`
   font-size: 3rem;
   font-weight: bold;
   color: ${(props) => (props.tileColor === 'white' ? 'black' : 'white')};
+  text-align: center;
 
   // animation-fill-mode:forwards allows the hint styling to persist after the animation
   // is done. However once the animation is done we want to retain the hint styling
