@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import Row from './Row';
 
 interface BoardProps {
@@ -8,6 +9,12 @@ interface BoardProps {
   flipRowAnimation: boolean,
   animateRow: string,
 }
+
+const BoardStyles = styled.div`
+  display: grid;
+  row-gap: .25rem;
+  padding: 2rem;
+`;
 
 /**
  * The board renders rows and it is in charge of juggling the different states
@@ -23,7 +30,7 @@ export default function Board({
   const guessRowIterator = [0, 1, 2, 3, 4, 5];
 
   return (
-    <>
+    <BoardStyles>
       {
         guessRowIterator.map((_:number, index: number) => {
           const active = index === attempt - 1;
@@ -41,6 +48,6 @@ export default function Board({
           );
         })
       }
-    </>
+    </BoardStyles>
   );
 }

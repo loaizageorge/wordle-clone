@@ -15,10 +15,13 @@ interface IKeyTileStyles {
 }
 
 const KeyTileStyles = styled.span<IKeyTileStyles>`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
   border: 1px solid black;
   padding: .5rem;
   margin: .25rem;
+  text-transform: capitalize;
   background-color: ${(props) => props.letterColor};
 `;
 

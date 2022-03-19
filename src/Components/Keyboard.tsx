@@ -16,6 +16,8 @@ const KeyboardStyles = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+  align-self: flex-end;
+  padding: 1rem;
 `;
 const KeyboardRowStyles = styled.div`
   display: block;

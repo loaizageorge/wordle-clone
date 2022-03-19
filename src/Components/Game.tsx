@@ -12,10 +12,12 @@ import Modal, { ModalType } from './Modal';
 // set these themselves as a way of increasing / decreasing the difficulty
 const GameStyles = styled.div`
   display: grid;
+  min-height: 100%;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 100%;
   grid-gap: .25rem;
   max-width: 520px;
   margin: 0 auto;
-  padding: 2rem;
 `;
 /**
  * TODO: switch this to context maybe, or just figure out a better strategy
