@@ -9,7 +9,6 @@ interface KeyBoardProps {
   removePrevLetterFromGuess: Function,
   guessedLetters: Array<IGuessedLetters>,
   guess: string[],
-
 }
 
 const KeyboardStyles = styled.div`
@@ -20,8 +19,6 @@ const KeyboardStyles = styled.div`
   padding: 1rem;
 `;
 const KeyboardRowStyles = styled.div`
-  display: block;
-  margin: .25rem;
 `;
 
 // explicitly rendering out which keys I want in each row to keep consistency
@@ -58,6 +55,7 @@ export default function Keyboard({
     window.addEventListener('keydown', keyPressHandler);
     return () => window.removeEventListener('keydown', keyPressHandler);
   }, [guess]);
+
   const renderKeyBoardRow = (row: string[]) => (
     <KeyboardRowStyles>
       {

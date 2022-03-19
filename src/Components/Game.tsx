@@ -19,15 +19,12 @@ const GameStyles = styled.div`
   max-width: 520px;
   margin: 0 auto;
 `;
-/**
- * TODO: switch this to context maybe, or just figure out a better strategy
- * for communicating between these 2 levels?
- */
+
 function Game() {
-  const [guess, updateGuess] = useState([]);
+  const [guess, updateGuess] = useState<string[]>([]);
   const [attempt, updateAttemptCount] = useState(1);
-  const [prevGuesses, addGuessToPrev] = useState([[]]);
-  const [flipRowAnimation, setFlipRowAnimation] = useState(false);
+  const [prevGuesses, addGuessToPrev] = useState<string[][]>([[]]);
+  const [flipRowAnimation, setFlipRowAnimation] = useState<boolean>(false);
   const [animateRow, setAnimateRow] = useState('');
   const [guessedLetters, setGuessedLetters] = useState<IGuessedLetters[]>([]);
   // modal
@@ -36,8 +33,7 @@ function Game() {
   const [gameState, updateGameState] = useState(ModalType.none);
 
   const checkIfGuessIsRealWord = async () => {
-    // TODO: Remove when done testing, save dem api calls
-    return true;
+    // return true;
     const response = await request(guess.join(''));
     return response.some((item: any) => typeof (item) === 'object');
   };
@@ -47,9 +43,7 @@ function Game() {
     return guess.join('').toUpperCase() === ACTUAL_WORD.join(''.toUpperCase());
   };
 
-  function checkGameOver() {
-    return attempt === MAX_GUESSES;
-  }
+  const checkGameOver = () => attempt === MAX_GUESSES;
 
   /**
    * 1. Board === Word => You win!
@@ -66,16 +60,12 @@ function Game() {
       return;
     }
 
+    setAnimateRow('');
+
     const realWord = await checkIfGuessIsRealWord();
     if (!realWord) {
-      // alert('The word you have guessed has been deemed fake by Merriam')
       setAnimateRow('error');
       return;
-    }
-
-    // clear the error animation if it has been set previously
-    if (animateRow) {
-      setAnimateRow('');
     }
 
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -111,14 +101,10 @@ function Game() {
     setGuessedLetters([]);
   };
 
-  function gameActive() {
-    return gameState === ModalType.none;
-  }
+  const gameActive = () => gameState === ModalType.none;
 
-  // TOOD: Maybe these 2 methods can live in the Keyboard component?
   const addLetterToGuess = (letter: string) => {
     if (guess.length < WORD_LENGTH && gameActive()) {
-      // @ts-ignore -> TODO: wtf?
       updateGuess(guess.concat(letter.toUpperCase()));
     }
   };
