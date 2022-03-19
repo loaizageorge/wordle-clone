@@ -13,7 +13,7 @@ interface BoardProps {
 const BoardStyles = styled.div`
   display: grid;
   row-gap: .25rem;
-  padding: 2rem;
+  padding: 1rem;
 `;
 
 /**

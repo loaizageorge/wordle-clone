@@ -19,8 +19,8 @@ const KeyTileStyles = styled.span<IKeyTileStyles>`
   align-items: center;
   height: 2rem;
   border: 1px solid black;
+  margin: .1rem;
   padding: .5rem;
-  margin: .25rem;
   text-transform: capitalize;
   background-color: ${(props) => props.letterColor};
 `;

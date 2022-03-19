@@ -13,12 +13,12 @@ interface KeyBoardProps {
 
 const KeyboardStyles = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: column;
-  text-align: center;
   align-self: flex-end;
-  padding: 1rem;
 `;
 const KeyboardRowStyles = styled.div`
+  display: flex;
 `;
 
 // explicitly rendering out which keys I want in each row to keep consistency
